@@ -26,9 +26,6 @@ These are the payment methods that are currently provided and supported by this 
 - [PayPal](#paypal)
 - [BankTransfer](#bank-transfer)
 - [GooglePay](#google-pay)
-
-### Hosted
-
 - [Avarda](#avarda)
 
 ### Fallback
@@ -493,10 +490,6 @@ lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
 ### Avarda
 
-`AvardaComponent` handles Avarda buy-now-pay-later payments on Kronor's hosted payment page, which
-collects the customer's national identification number and redirects to Avarda's checkout for
-identification.
-
 Dependencies:
 
 ```groovy
@@ -536,7 +529,31 @@ val viewModelForAvarda = avardaViewModel(
 AvardaComponent(viewModelForAvarda)
 ```
 
-Payment events are handled the same way as for the [Fallback Component](#fallback-component).
+Handling the payment events:
+
+```kotlin
+lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+    launch {
+        viewModelForAvarda.events.collect { event ->
+            when (event) {
+                PaymentEvent.PaymentFailure -> {
+                    // handle the event here, example:
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("paymentMethods")
+                    }
+                }
+
+                is PaymentEvent.PaymentSuccess -> {
+                    // handle the success event here, example:
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("paymentMethods")
+                    }
+                }
+            }
+        }
+    }
+}
+```
 
 ### Fallback Component
 

@@ -84,7 +84,7 @@ private fun PaymentMethod.toDestination(sessionToken: String): PaymentDestinatio
     is PaymentMethod.Avarda -> PaymentDestination(
         kind = PaymentKind.AVARDA,
         sessionToken = sessionToken,
-        buyNowPayLaterProduct = buyNowPayLaterProduct,
+        buyNowPayLaterProduct = buyNowPayLaterProduct
     )
     is PaymentMethod.Fallback -> PaymentDestination(
         kind = PaymentKind.FALLBACK,
